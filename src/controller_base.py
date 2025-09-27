@@ -1,6 +1,6 @@
 import numpy as np
 from abc import ABC, abstractmethod
-from typing import Dict, Any, Optional, Union
+from typing import Dict, Any, Optional
 from threading import Lock
 import time
 
@@ -122,45 +122,57 @@ class ControllerBase(ABC):
         """获取状态管理器（便捷访问）"""
         return self._state_manager
     
-    def get_position(self) -> np.ndarray:
+    def get_pos(self) -> np.ndarray:
         """获取当前位置"""
-        return self._state_manager.position.copy()
+        return self._state_manager.pos.copy()
     
-    def get_velocity(self) -> np.ndarray:
+    def get_vel_body(self) -> np.ndarray:
         """获取当前速度"""
-        return self._state_manager.velocity.copy()
+        return self._state_manager.vel_body.copy()
+
+    def get_acc_body(self) -> np.ndarray:
+        """获取当前加速度"""
+        return self._state_manager.acc_body.copy()
     
-    def get_orientation(self) -> np.ndarray:
+    def get_ori_body(self) -> np.ndarray:
         """获取当前姿态（四元数）"""
-        return self._state_manager.orientation.copy()
+        return self._state_manager.ori.copy()
     
-    def get_angular_velocity(self) -> np.ndarray:
+    def get_ang_vel_body(self) -> np.ndarray:
         """获取当前角速度"""
-        return self._state_manager.angular_velocity.copy()
+        return self._state_manager.ang_vel_body.copy()
+
+    def get_ang_acc_body(self) -> np.ndarray:
+        """获取当前角加速度"""
+        return self._state_manager.ang_acc_body.copy()
     
-    def get_reference_position(self) -> np.ndarray:
+    def get_ref_pos(self) -> np.ndarray:
         """获取参考位置"""
-        return self._state_manager.ref_position.copy()
+        return self._state_manager.ref_pos.copy()
     
-    def get_reference_velocity(self) -> np.ndarray:
+    def get_ref_vel_body(self) -> np.ndarray:
         """获取参考速度"""
-        return self._state_manager.ref_velocity.copy()
+        return self._state_manager.ref_vel_body.copy()
     
-    def get_reference_orientation(self) -> np.ndarray:
+    def get_ref_acc_body(self) -> np.ndarray:
+        """获取参考加速度"""
+        return self._state_manager.ref_acc_body.copy()
+    
+    def get_ref_ori(self) -> np.ndarray:
         """获取参考姿态"""
-        return self._state_manager.ref_orientation.copy()
+        return self._state_manager.ref_ori.copy()
     
-    def set_reference_position(self, position: np.ndarray):
-        """设置参考位置"""
-        self._state_manager.ref_position[:] = position
+    def get_ref_ang_vel_body(self) -> np.ndarray:
+        """获取参考角速度"""
+        return self._state_manager.ref_ang_vel_body.copy()
+
+    def get_ref_ang_acc_body(self) -> np.ndarray:
+        """获取参考角加速度"""
+        return self._state_manager.ref_ang_acc_body.copy()
     
-    def set_reference_velocity(self, velocity: np.ndarray):
-        """设置参考速度"""
-        self._state_manager.ref_velocity[:] = velocity
-    
-    def set_reference_orientation(self, orientation: np.ndarray):
-        """设置参考姿态"""
-        self._state_manager.ref_orientation[:] = orientation
+    def get_timestamp(self) -> float:
+        """获取当前时间戳"""
+        return self._state_manager.timestamp
     
     # ==================== 控制器核心接口 ====================
     

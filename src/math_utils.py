@@ -6,7 +6,7 @@
 
 import numpy as np
 from scipy.spatial.transform import Rotation as R
-from typing import Union, Tuple
+from typing import Tuple
 import warnings
 
 
