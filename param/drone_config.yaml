@@ -1,0 +1,36 @@
+# 无人机控制器参数配置文件
+# 生成时间: 2025-09-26 21:23:53
+# 自动生成，请谨慎修改
+
+# 控制器参数
+position_kp: [3.0, 3.0, 3.0]
+position_ki: [0.1, 0.1, 0.1]
+position_kd: [0.5, 0.5, 0.5]
+attitude_kp: [2.0, 2.0, 1.0]
+attitude_ki: [0.0, 0.0, 0.0]
+attitude_kd: [0.1, 0.1, 0.05]
+angular_rate_kp: [0.5, 0.5, 0.2]
+angular_rate_ki: [0.1, 0.1, 0.05]
+angular_rate_kd: [0.01, 0.01, 0.005]
+
+# 物理参数
+mass: 1.5
+gravity: 9.81
+inertia_matrix:
+  - [   0.100,    0.000,    0.000]
+  - [   0.000,    0.100,    0.000]
+  - [   0.000,    0.000,    0.200]
+
+# 限制参数
+max_velocity: [5.0, 5.0, 3.0]
+max_acceleration: [3.0, 3.0, 2.0]
+max_angular_velocity: [2.0, 2.0, 1.0]
+max_thrust: 30.0
+max_torque: [1.0, 1.0, 0.5]
+
+# 控制器配置
+control_frequency: 100.0
+enable_integral_windup_protection: true
+integral_limit: [1.0, 1.0, 1.0]
+deadzone_threshold: 0.01
+
