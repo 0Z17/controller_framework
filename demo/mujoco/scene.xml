@@ -4,6 +4,7 @@
   <!-- <include file="NURBS_coll.xml"/> -->
 
   <include file="skyvortex.xml"/>
+  <include file="skyvortex_with_dummy.xml"/>
 
   <statistic center="0 -0.2 0.1" extent="1.0"/>
 

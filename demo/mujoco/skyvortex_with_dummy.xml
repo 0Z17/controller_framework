@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mujoco model="skyvortex_dummy">
+  <compiler autolimits="true" angle="radian" assetdir="assets" />
+  <option timestep="0.01" gravity="0 0 -9.81" density="1.225" viscosity="1.8e-5" />
+  <default>
+    <default class="skyvortex_dummy">
+      <default class="visual_dummy">
+        <geom group="2" contype="0" conaffinity="0" />
+      </default>
+      <default class="collision_dummy">
+        <geom group="3" />
+      </default>
+      <site group="3" />
+      <motor ctrlrange="0 130" />
+    </default>
+  </default>
+  <!-- <asset>
+    <mesh name="base_link" file="base_link.STL" />
+    <mesh name="operator_Link" file="operator_Link.STL" />
+    <mesh name="end_Link" file="end_Link.STL" />
+    <mesh name="camera_Link" file="camera_Link.STL" />
+    <mesh name="rotor1_Link" file="rotor1_Link.STL" />
+    <mesh name="rotor2_Link" file="rotor2_Link.STL" />
+    <mesh name="rotor3_Link" file="rotor3_Link.STL" />
+    <mesh name="rotor4_Link" file="rotor4_Link.STL" />
+    <mesh name="rotor5_Link" file="rotor5_Link.STL" />
+    <mesh name="rotor6_Link" file="rotor6_Link.STL" />
+    <mesh name="end_effector_base_link" file="end_effector_base_link.STL" />
+    <mesh name="connect_Link" file="connect_Link.STL" />
+    <mesh name="move_base_Link" file="move_base_Link.STL" />
+    <mesh name="wheel2_Link" file="wheel2_Link.STL" />
+    <mesh name="wheel1_Link" file="wheel1_Link.STL" />
+    <mesh name="wheel3_Link" file="wheel3_Link.STL" />
+    <mesh name="move_base_chassis_coll" file="move_base_chassis_coll.STL" />
+    <mesh name="move_base_camera_coll000" file="move_base_camera_coll000.STL" />
+    <mesh name="move_base_camera_coll001" file="move_base_camera_coll001.STL" />
+    <mesh name="operator_coll" file="operator_coll.STL" />
+  </asset> -->
+  <worldbody>
+    <body name="base_link_dummy" pos="20 20 0.5" childclass="skyvortex_dummy">
+      <site name="imu_dummy" pos="0 0 0" />
+      <geom class="visual_dummy" type="mesh" rgba="0.2 0.4 1 1" mesh="base_link" contype="0" conaffinity="0" />
+      <!-- <geom name="leg1_dummy" class="collision_dummy" type="cylinder" size="0.030 0.175" pos="0.030677 -0.25355 -0.17398" quat="0.95305 -0.122402 -0.152147 -0.231442" contype="0" conaffinity="0" />
+      <geom name="leg2_dummy" class="collision_dummy" type="cylinder" size="0.030 0.175" pos="-0.23492 -0.10021 -0.17398" quat="0.718355 0.152077 0.119159 0.668311" contype="0" conaffinity="0" />
+      <geom name="leg3_dummy" class="collision_dummy" type="cylinder" size="0.030 0.175" pos="0.23492 0.10021 -0.17398" quat="0.718355 -0.152077 -0.119159 0.668311" contype="0" conaffinity="0" />
+      <geom name="leg4_dummy" class="collision_dummy" type="cylinder" size="0.030 0.175" pos="-0.030677 0.25355 -0.17398" quat="0.95305 0.122402 0.152147 -0.231442" contype="0" conaffinity="0" />
+      <geom name="rotor1_dummy" class="collision_dummy" type="cylinder" size="0.228 0.02" pos="0.44207 0.2778 0.033856" quat="0.922577 -0.190485 -0.184513 -0.280218" contype="0" conaffinity="0" />
+      <geom name="rotor2_dummy" class="collision_dummy" type="cylinder" size="0.228 0.02" pos="0.019547 0.52175 0.033856" quat="0.683013 0.183012 0.183012 0.683013" contype="0" conaffinity="0" />
+      <geom name="rotor3_dummy" class="collision_dummy" type="cylinder" size="0.228 0.02" pos="-0.46162 0.24395 0.033856" quat="0.922493 0.190542 -0.184455 0.280495" contype="0" conaffinity="0" />
+      <geom name="rotor4_dummy" class="collision_dummy" type="cylinder" size="0.228 0.02" pos="-0.46162 -0.24395 0.033856" quat="0.922577 -0.190485 -0.184513 -0.280218" contype="0" conaffinity="0" />
+      <geom name="rotor5_dummy" class="collision_dummy" type="cylinder" size="0.228 0.02" pos="0.019547 -0.52175 0.033856" quat="0.683013 0.183012 0.183012 0.683013" contype="0" conaffinity="0" />
+      <geom name="rotor6_dummy" class="collision_dummy" type="cylinder" size="0.228 0.02" pos="0.442074 -0.277802 0.0338557" quat="0.922493 0.190542 -0.184455 0.280495" contype="0" conaffinity="0" /> -->
+      <site name="rotor_site_0_dummy" pos="0.44207 0.2778 0.033856" zaxis="-0.249999 0.433009 0.866028" />
+      <site name="rotor_site_1_dummy" pos="0.019547 0.52175 0.033856" zaxis="0.499998 0 0.866027" />
+      <site name="rotor_site_2_dummy" pos="-0.46162 0.24395 0.033856" zaxis="-0.249999 -0.433009 0.866028" />
+      <site name="rotor_site_3_dummy" pos="-0.46162 -0.24395 0.033856" zaxis="-0.249999 0.433009 0.866028" />
+      <site name="rotor_site_4_dummy" pos="0.019547 -0.52175 0.033856" zaxis="0.499998 0 0.866027" />
+      <site name="rotor_site_5_dummy" pos="0.442074 -0.277802 0.0338557" zaxis="-0.25 -0.433013 0.866025" />
+      <body name="operator_Link_dummy" pos="0.000870575 0.000171621 0.0284551">
+        <geom class="visual_dummy" type="mesh" rgba="0.2 0.4 1 1" mesh="operator_Link" contype="0" conaffinity="0" />
+        <geom class="visual_dummy" group="4" pos="0.832191 -0.014141 0.480535" quat="0.865994 0.00424768 0.499982 -0.0073572" type="mesh" rgba="0.2 0.4 1 1" mesh="end_Link" contype="0" conaffinity="0" />
+        <geom class="visual_dummy" group="4" pos="-0.1084 0.001842 0.21154" quat="0.965891 -0.00219878 -0.25881 -0.00820592" type="mesh" rgba="0.2 0.4 1 1" mesh="camera_Link" contype="0" conaffinity="0" />
+        <geom class="visual_dummy" pos="0.257683 -0.00437869 0.148795" quat="0.350537 0.607148 -0.617553 -0.356544" type="mesh" rgba="0.2 0.4 1 1" mesh="end_effector_base_link" contype="0" conaffinity="0" />
+        <!-- <geom name="operator_link_coll_dummy" class="collision_dummy" type="cylinder" size="0.04 0.4" pos="0.4 0 0.235" quat="0.86271 0.0129416 0.505476 -0.00758272" contype="0" conaffinity="0" />
+        <geom name="operator_coll_dummy" class="collision_dummy" type="mesh" mesh="operator_coll" contype="0" conaffinity="0" /> -->
+        <body name="connect_Link_dummy" pos="0.515159 -0.00875385 0.29747" quat="0.350537 0.607148 -0.617553 -0.356544">
+          <geom class="visual_dummy" type="mesh" rgba="0.2 0.4 1 1" mesh="connect_Link" contype="0" conaffinity="0" />
+          <site name="connect_site_dummy" group="5" />
+          <geom class="visual_dummy" pos="0 0 -0.4115" quat="1 0 0 0" type="mesh" rgba="0.2 0.4 1 1" mesh="move_base_Link" contype="0" conaffinity="0" />
+          <!-- <geom name="end_base_coll_1_dummy" class="collision_dummy" pos="0 0 -0.4115" quat="1 0 0 0" type="mesh" rgba="0.7 0.2 0.2 1" mesh="move_base_chassis_coll" contype="0" conaffinity="0" />
+          <geom name="end_base_coll_2_dummy" class="collision_dummy" pos="0 0 -0.4115" quat="1 0 0 0" type="mesh" rgba="0.7 0.2 0.2 1" mesh="move_base_camera_coll000" contype="0" conaffinity="0" />
+          <geom name="end_base_coll_3_dummy" class="collision_dummy" pos="0 0 -0.4115" quat="1 0 0 0" type="mesh" rgba="0.7 0.2 0.2 1" mesh="move_base_camera_coll001" contype="0" conaffinity="0" /> -->
+          <body name="wheel2_Link_dummy" pos="0.07403 -0.042741 -0.4" quat="0.499998 0 0 -0.866027">
+            <geom class="visual_dummy" type="mesh" rgba="0.2 0.4 1 1" mesh="wheel2_Link" contype="0" conaffinity="0" />
+            <!-- <geom name="wheel2_coll_dummy" class="collision_dummy" type="mesh" rgba="0.7 0.2 0.2 1" mesh="wheel2_Link" contype="0" conaffinity="0" /> -->
+          </body>
+          <body name="wheel1_Link_dummy" pos="0 0.085482 -0.4">
+            <geom class="visual_dummy" type="mesh" rgba="0.2 0.4 1 1" mesh="wheel1_Link" contype="0" conaffinity="0" />
+            <!-- <geom name="wheel1_coll_dummy" class="collision_dummy" type="mesh" rgba="0.7 0.2 0.2 1" mesh="wheel1_Link" contype="0" conaffinity="0" /> -->
+          </body>
+          <body name="wheel3_Link_dummy" pos="-0.07403 -0.042741 -0.4" quat="0.499998 0 0 0.866027">
+            <geom class="visual_dummy" type="mesh" rgba="0.2 0.4 1 1" mesh="wheel3_Link" contype="0" conaffinity="0" />
+            <!-- <geom name="wheel3_coll_dummy" class="collision_dummy" type="mesh" rgba="0.7 0.2 0.2 1" mesh="wheel3_Link" contype="0" conaffinity="0" /> -->
+          </body>
+        </body>
+      </body>
+      <body name="rotor0_Link_dummy" pos="0.44207 0.2778 0.033856">
+        <geom class="visual_dummy" type="mesh" rgba="0.2 0.4 1 1" mesh="rotor1_Link" contype="0" conaffinity="0" />
+      </body>
+      <body name="rotor1_Link_dummy" pos="0.019547 0.52175 0.033856">
+        <geom class="visual_dummy" type="mesh" rgba="0.2 0.4 1 1" mesh="rotor2_Link" contype="0" conaffinity="0" />
+      </body>
+      <body name="rotor2_Link_dummy" pos="-0.46162 0.24395 0.033856">
+        <geom class="visual_dummy" type="mesh" rgba="0.2 0.4 1 1" mesh="rotor3_Link" contype="0" conaffinity="0" />
+      </body>
+      <body name="rotor3_Link_dummy" pos="-0.46162 -0.24395 0.033856">
+        <geom class="visual_dummy" type="mesh" rgba="0.2 0.4 1 1" mesh="rotor4_Link" contype="0" conaffinity="0" />
+      </body>
+      <body name="rotor4_Link_dummy" pos="0.019547 -0.52175 0.033856">
+        <geom class="visual_dummy" type="mesh" rgba="0.2 0.4 1 1" mesh="rotor5_Link" contype="0" conaffinity="0" />
+      </body>
+      <body name="rotor5_Link_dummy" pos="0.442074 -0.277802 0.0338557">
+        <geom class="visual_dummy" type="mesh" rgba="0.2 0.4 1 1" mesh="rotor6_Link" contype="0" conaffinity="0" />
+      </body>
+    </body>
+  </worldbody>
+</mujoco>

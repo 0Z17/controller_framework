@@ -543,6 +543,7 @@ def main():
                 if count % 1 == 0:
                     # 仿真步进
                     mj.mj_step(controller.model, controller.data)
+                    mj.mj_forward(controller.model, controller.data)
                 
                 #更新viewer
                 v.sync()
