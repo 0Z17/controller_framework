@@ -76,6 +76,42 @@ class StateManager:
                 'torque': self.torque.copy(),
                 'timestamp': self.timestamp
             }
+
+    # ==================== 参考轨迹写入接口 ====================
+    def set_ref_position(self, pos: np.ndarray):
+        with self._lock:
+            self.ref_pos = np.asarray(pos, dtype=float)
+
+    def set_ref_velocity(self, vel: np.ndarray):
+        with self._lock:
+            self.ref_vel = np.asarray(vel, dtype=float)
+
+    def set_ref_velocity_body(self, vel_body: np.ndarray):
+        with self._lock:
+            self.ref_vel_body = np.asarray(vel_body, dtype=float)
+
+    def set_ref_acceleration_body(self, acc_body: np.ndarray):
+        with self._lock:
+            self.ref_acc_body = np.asarray(acc_body, dtype=float)
+
+    def set_ref_orientation_quaternion(self, quat_wxyz: np.ndarray):
+        with self._lock:
+            q = np.asarray(quat_wxyz, dtype=float)
+            self.ref_ori = q / np.linalg.norm(q)
+
+    def set_ref_orientation_yaw(self, yaw: float):
+        with self._lock:
+            R = MathUtils.euler_to_rotation_matrix(0.0, 0.0, float(yaw))
+            q = MathUtils.rotation_matrix_to_quaternion(R)
+            self.ref_ori = q
+
+    def set_ref_angular_velocity_body(self, ang_vel_body: np.ndarray):
+        with self._lock:
+            self.ref_ang_vel_body = np.asarray(ang_vel_body, dtype=float)
+
+    def set_ref_angular_acceleration_body(self, ang_acc_body: np.ndarray):
+        with self._lock:
+            self.ref_ang_acc_body = np.asarray(ang_acc_body, dtype=float)
     
     def reset_all_states(self):
         """重置所有状态到初始值"""

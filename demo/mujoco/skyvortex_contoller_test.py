@@ -11,6 +11,8 @@ import time
 import sys
 import os
 from typing import Dict, Any
+import zmq
+import json
 
 # 添加项目根目录到路径
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
@@ -217,6 +219,9 @@ class SkyVortexRobot:
             state_manager=self.state_manager,
             controller_name="SkyVortex_GeometryController"
         )
+        # ZMQ订阅器（遥控器轨迹）
+        self._zmq_ctx = None
+        self._zmq_sock = None
         
         # 控制参数
         self.control_dt = 0.01  # 10ms控制周期
@@ -260,6 +265,71 @@ class SkyVortexRobot:
         self.state_manager.ref_ori = np.array([1, 0, 0, 0])  # 水平姿态
         self.state_manager.ref_ang_vel_body = np.zeros(3)
         self.state_manager.ref_ang_acc_body = np.zeros(3)
+
+    def start_trajectory_subscriber(self, endpoint: str = "tcp://127.0.0.1:5555", topic: str = "traj"):
+        self._zmq_ctx = zmq.Context.instance()
+        self._zmq_sock = self._zmq_ctx.socket(zmq.SUB)
+        self._zmq_sock.connect(endpoint)
+        self._zmq_sock.setsockopt_string(zmq.SUBSCRIBE, topic)
+
+    def poll_and_apply_reference(self) -> bool:
+        if self._zmq_sock is None:
+            return False
+        try:
+            parts = self._zmq_sock.recv_multipart(flags=zmq.NOBLOCK)
+        except Exception:
+            return False
+        payload = parts[1].decode()
+        msg = json.loads(payload)
+        schema = msg.get("schema", [])
+        values = msg.get("values", [])
+        m = {k: float(values[i]) for i, k in enumerate(schema)}
+        x = m.get("x", 0.0)
+        y = m.get("y", 0.0)
+        z = m.get("z", 0.0)
+        yaw = m.get("yaw", 0.0)
+        theta = m.get("theta", 0.0)
+        # 更新参考轨迹
+        self.state_manager.set_ref_position(np.array([x, y, z], dtype=float))
+        self.state_manager.set_ref_orientation_yaw(yaw)
+        # 更新dummy可视化（如果模型包含dummy）
+        # 直接设置mocap位置：base_link_dummy, operator_Link_dummy
+        body_id = mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_BODY, "base_link_dummy")
+        if body_id >= 0:
+            mocap_id = int(self.model.body_mocapid[body_id])
+            if mocap_id >= 0:
+                # 基体位置与偏航
+                R = MathUtils.euler_to_rotation_matrix(0.0, 0.0, yaw)
+                q = MathUtils.rotation_matrix_to_quaternion(R)
+                self.data.mocap_pos[mocap_id] = np.array([x, y, z], dtype=float)
+                self.data.mocap_quat[mocap_id] = q
+                # 操作臂（相对机体y旋转）
+                op_id = mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_BODY, "operator_Link_dummy")
+                if op_id >= 0:
+                    op_mocap = int(self.model.body_mocapid[op_id])
+                    if op_mocap >= 0:
+                        # 使用固定相对偏移，同 dummy_robot 默认
+                        rel = np.array([0.000870575, 0.000171621, 0.0284551], dtype=float)
+                        q_base = q
+                        v = np.array([0.0, *rel])
+                        v_rot = MathUtils.quaternion_multiply(MathUtils.quaternion_multiply(q_base, v), MathUtils.quaternion_conjugate(q_base))
+                        p_world = np.array([x, y, z], dtype=float) + v_rot[1:]
+                        R_rel = MathUtils.euler_to_rotation_matrix(0.0, float(theta), 0.0)
+                        q_rel = MathUtils.rotation_matrix_to_quaternion(R_rel)
+                        q_world = MathUtils.quaternion_multiply(q_base, q_rel)
+                        q_world = MathUtils.normalize_quaternion(q_world)
+                        self.data.mocap_pos[op_mocap] = p_world
+                        self.data.mocap_quat[op_mocap] = q_world
+                mujoco.mj_forward(self.model, self.data)
+        return True
+
+    def close_trajectory_subscriber(self):
+        if self._zmq_sock is not None:
+            self._zmq_sock.close(0)
+            self._zmq_sock = None
+        if self._zmq_ctx is not None:
+            self._zmq_ctx.term()
+            self._zmq_ctx = None
     
     def update_state_from_sensors(self):
         """从传感器更新状态管理器"""
@@ -320,6 +390,7 @@ def main():
     try:
         # 创建机器人实例
         robot = SkyVortexRobot(model_path)
+        robot.start_trajectory_subscriber(endpoint="tcp://127.0.0.1:5555", topic="traj")
         print("SkyVortex 机器人初始化成功")
         
         # 创建可视化窗口
@@ -337,6 +408,8 @@ def main():
                     
                     # 控制频率控制
                     if robot.data.time - last_control_time >= robot.control_dt:
+                        # 先尝试接收遥控参考并更新
+                        robot.poll_and_apply_reference()
                         # 执行控制步骤
                         robot.control_step()
                         last_control_time = robot.data.time
@@ -368,6 +441,7 @@ def main():
                         
             except KeyboardInterrupt:
                 print("\n仿真被用户中断")
+                robot.close_trajectory_subscriber()
                 
     except Exception as e:
         print(f"仿真过程中发生错误: {e}")
