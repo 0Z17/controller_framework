@@ -271,6 +271,7 @@ class SkyVortexRobot:
         self._zmq_sock = self._zmq_ctx.socket(zmq.SUB)
         self._zmq_sock.connect(endpoint)
         self._zmq_sock.setsockopt_string(zmq.SUBSCRIBE, topic)
+        self._zmq_sock.setsockopt(zmq.CONFLATE, 1)
 
     def poll_and_apply_reference(self) -> bool:
         if self._zmq_sock is None:
